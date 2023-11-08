@@ -66,6 +66,11 @@
                     <a href="<?= ROOT ?>admincarts/sales" class="nav-link">Ventas</a>
                 </li>
             </ul>
+            <ul class="nav navbar-nav navbar-right mt-2 mt-lg-0">
+                <li class="nav-item">
+                    <a href="<?= ROOT . 'shop/logout' ?>" class="nav-link">Salir</a>
+                </li>
+            </ul>
         <?php endif; ?>
     </div>
 </nav>
