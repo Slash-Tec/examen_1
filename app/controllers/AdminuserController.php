@@ -37,7 +37,6 @@ class AdminuserController extends Controller
     public function create()
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
             $errors = [];
             $name = $_POST['name'] ?? '';
             $email = $_POST['email'] ?? '';
@@ -67,13 +66,47 @@ class AdminuserController extends Controller
             }
 
             if (count($errors) == 0) {
+                $dataFormAdmin = [
+                    'name' => $name,
+                    'email' => $email,
+                    'password' => $password1,
+                ];
 
-                if ($this->model->createAdminUser($dataForm)) {
+                $adminInsertSuccess = $this->model->insertAdminUser($dataFormAdmin);
 
-                    header('location:' . ROOT . 'adminuser');
+                if ($adminInsertSuccess) {
+                    $userData = [
+                        'first_name' => $name,
+                        'last_name_1' => 'Default',
+                        'last_name_2' => 'Default',
+                        'email' => $email,
+                        'address' => 'c/ default',
+                        'city' => 'Default',
+                        'state' => 'Default',
+                        'postcode' => '30001',
+                        'country' => 'Default',
+                        'password' => $password1
+                    ];
 
+                    $userInsertSuccess = $this->model->insertUser($userData);
+
+                    if ($userInsertSuccess) {
+                        header('location:' . ROOT . 'adminuser');
+                    } else {
+                        $data = [
+                            'title' => 'Error durante la creación del usuario',
+                            'menu' => false,
+                            'subtitle' => 'Error al crear un nuevo usuario administrador',
+                            'text' => 'Sucedió un error durante la creación de un nuevo administrador',
+                            'color' => 'alert-danger',
+                            'url' => 'adminuser',
+                            'colorButton' => 'btn-danger',
+                            'textButton' => 'Volver',
+                        ];
+
+                        $this->view('mensaje', $data);
+                    }
                 } else {
-
                     $data = [
                         'title' => 'Error durante la creación del usuario',
                         'menu' => false,
@@ -86,11 +119,8 @@ class AdminuserController extends Controller
                     ];
 
                     $this->view('mensaje', $data);
-
                 }
-
             } else {
-
                 $data = [
                     'title' => 'Administración de usuarios - Alta',
                     'menu' => false,
@@ -102,7 +132,6 @@ class AdminuserController extends Controller
                 $this->view('admin/users/create', $data);
             }
         } else {
-
             $data = [
                 'title' => 'Administración de usuarios - Alta',
                 'menu' => false,
@@ -111,7 +140,6 @@ class AdminuserController extends Controller
             ];
 
             $this->view('admin/users/create', $data);
-
         }
     }
 
