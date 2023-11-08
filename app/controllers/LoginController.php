@@ -330,7 +330,9 @@ class LoginController extends Controller
         $password = $_POST['password'] ?? '';
         $remember = $_POST['remember'] ?? '';
 
-        $value = $user . '|' . $password;
+        $encryptedPassword = hash_hmac('sha512', $password, ENCRIPTKEY);
+
+        $value = $user . '|' . $encryptedPassword;
         if ($remember == 'on') {
             $date = time() + (60*60*24*7);
         } else {
